@@ -4,7 +4,8 @@ name: deploy_frontend
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches:
+      - main
     paths:
       - "frontend/**"
 
@@ -23,12 +24,6 @@ jobs:
         with:
           inlineScript: |
             az storage blob upload-batch --account-name azureresumenishtweb -d '$web' -s frontend/ --overwrite
-      - name: Purge CDN endpoint
-        uses: azure/CLI@v1
-        with:
-          inlineScript: |
-            az cdn endpoint purge --content-paths  "/*" --profile-name "CloudResumeChallengeGPS" --name "gpsazuresume" --resource-group "cloudresumechallenge-rg"
-
       # Azure logout
       - name: logout
         run: |
